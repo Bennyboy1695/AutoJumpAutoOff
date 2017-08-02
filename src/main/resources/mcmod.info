@@ -1,0 +1,17 @@
+[
+  {
+    "modid": "autojumpautooff",
+    "name": "AutoJumpAutoOff",
+    "description": "As the mod name suggests this just simply turns off the AutoJump when a world is loaded or server is joined!",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Bennyboy1695"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": [
+    ]
+  }
+]
