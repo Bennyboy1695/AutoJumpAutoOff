@@ -2,9 +2,11 @@ package io.github.Bennyboy1695.AutoJumpAutoOff;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.toasts.TutorialToast;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.Timer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,6 +21,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.TimerTask;
 
 @Mod(modid = "autojumpautooff", name = "AutoJumpAutoOff", version = "1.0.0", clientSideOnly = true, acceptableRemoteVersions = "*", acceptedMinecraftVersions = "[1.10.2,1.12]")
 public class AutoJumpAutoOff {
@@ -66,6 +70,10 @@ public class AutoJumpAutoOff {
                 }
                 FMLLog.info(logprefix + "Set AutoJump to false!");
                 if (messageEnabled) {
+                    if (Minecraft.getMinecraft().getToastGui().getToast(AutoJumpToast.class,
+                            AutoJumpToast.Type.AutoJump) == null) {
+                        Minecraft.getMinecraft().getToastGui().add(new AutoJumpToast(new TextComponentString("AutoJumpAutoOff"), new TextComponentString("AutoJump disabled!")));
+                    }
                     FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(Minecraft.getMinecraft().player.getUniqueID()).sendMessage(new TextComponentString(prefix + TextFormatting.GREEN + "AutoJump has been turned off!"));
                 }
             } else if (!AutoJumpAutoOff.notified){
@@ -89,7 +97,15 @@ public class AutoJumpAutoOff {
                 Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound, 1));}
                 FMLLog.info(logprefix + "Set AutoJump to false!");
                 if (messageEnabled) {
-                FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(Minecraft.getMinecraft().player.getUniqueID()).sendMessage(new TextComponentString(prefix + TextFormatting.GREEN +"AutoJump has been turned off!"));}
+                    if (Minecraft.getMinecraft().getToastGui().getToast(AutoJumpToast.class,
+                            AutoJumpToast.Type.AutoJump) == null) {
+                        Minecraft.getMinecraft().getToastGui().add(new AutoJumpToast(new TextComponentString("AutoJumpAutoOff"), new TextComponentString("AutoJump disabled!")));
+                        if (Minecraft.getMinecraft().player.ticksExisted > 200) {
+                            Minecraft.getMinecraft().getToastGui().getToast(AutoJumpToast.class, AutoJumpToast.Type.AutoJump).hide();
+                        }
+
+                    }
+                    FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(Minecraft.getMinecraft().player.getUniqueID()).sendMessage(new TextComponentString(prefix + TextFormatting.GREEN +"AutoJump has been turned off!"));}
             } else {
                 if (!AutoJumpAutoOff.notified) {
                     FMLLog.info(logprefix + "This setting is already false!");
