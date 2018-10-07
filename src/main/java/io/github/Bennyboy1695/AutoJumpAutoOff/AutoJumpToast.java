@@ -4,6 +4,7 @@ import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,8 +20,17 @@ public class AutoJumpToast implements IToast {
         private IToast.Visibility visibility = IToast.Visibility.SHOW;
 
         public AutoJumpToast(ITextComponent titleComponent, ITextComponent subtitleComponent) {
-            this.title = titleComponent.getUnformattedText();
-            this.subtitle = subtitleComponent == null ? null : subtitleComponent.getUnformattedText();
+            if (!titleComponent.getUnformattedText().isEmpty()) {
+                this.title = titleComponent.getUnformattedText();
+            } else {
+                this.title = new TextComponentString("AutoJumpAutoOff").getUnformattedComponentText();
+            }
+            if (!subtitleComponent.getUnformattedText().isEmpty()) {
+                this.subtitle = subtitleComponent == null ? null : subtitleComponent.getUnformattedText();
+            } else {
+                this.subtitle = new TextComponentString("AutoJump disabled!").getUnformattedComponentText();
+            }
+
             type = Type.AutoJump;
         }
 
@@ -41,7 +51,7 @@ public class AutoJumpToast implements IToast {
         }
 
         public void hide() {
-            this.visibility = IToast.Visibility.HIDE;
+            this.visibility = Visibility.HIDE;
 
         }
 
